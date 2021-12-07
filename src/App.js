@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import Navbar from "./Components/Navbar/Navbar";
+import SearchBar from "./Components/SearchBar/SearchBar";
+import './App.css'
+import Pokedex from "./Components/Pokedex/Pokedex";
+import { useState, useEffect } from "react";
+import { getPokemon, getPokemonData } from './api'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [pokemons, setPokemons] = useState([])
+
+    const fetchPokemon = async () => {
+        try {
+            const data = await getPokemon();
+            const promises = data.results.map(async (pokemon) => {
+                return await getPokemonData(pokemon.url)
+            })
+            const results = await Promise.all(promises)
+            setPokemons(results)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchPokemon();
+    }, [])
+
+    return (
+        <div>
+            <Navbar />
+            <div className="App">
+                <SearchBar />
+                <Pokedex pokemons={pokemons} />
+            </div>
+        </div>
+    );
 }
 
 export default App;
