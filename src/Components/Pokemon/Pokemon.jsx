@@ -1,8 +1,20 @@
-import React from 'react'
+import { useContext } from 'react'
+import FavoriteContext from '../../context/favoriteContext'
 import './Pokemon.css'
+import { AiFillHeart } from "react-icons/ai"
 
-const Pokemon = (props) => {
-    const { pokemon } = props;
+const Pokemon = ({ pokemon }) => {
+    // const { pokemon } = props;
+    const { favoritePokemons, updateFavoritePokemons } = useContext(FavoriteContext)
+
+    const redHeart = <AiFillHeart className='redHeart' />
+    const blackHeart = <AiFillHeart className='blackHeart' />
+    const heart = favoritePokemons.includes(pokemon.name) ? redHeart : blackHeart;
+
+    const clickHeart = (e) => {
+        e.preventDefault()
+        updateFavoritePokemons(pokemon.name)
+    }
 
     return (
         <div className="pokemon-card" >
@@ -26,12 +38,11 @@ const Pokemon = (props) => {
                             )
                         })}
                     </div>
-                    <button className="pokemon-heart-btn">
-                        <div className="pokemon-favorite"></div>
+                    <button onClick={clickHeart} className="pokemon-heart-btn">
+                        <div className='pokemon-favorite'>{heart}</div>
                     </button>
                 </div>
             </div>
-            <div></div>
         </div>
     )
 }

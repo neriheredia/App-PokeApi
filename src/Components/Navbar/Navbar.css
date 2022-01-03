@@ -9,3 +9,9 @@ nav {
 .navbar-image {
   width: 160px;
 }
+
+.redHeartNav {
+  width: 30px;
+  height: 30px;
+  color: red;
+}
